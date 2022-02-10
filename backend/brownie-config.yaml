@@ -1,0 +1,8 @@
+dotenv: .env
+networks:
+  development:
+    verify: False
+  rinkeby:
+    verify: True
+  kovan:
+    verify: True
