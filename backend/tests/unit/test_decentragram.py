@@ -30,7 +30,6 @@ def test_can_upload_post():
     assert tx.events["PostUploaded"][0]["id"] == 0
     assert tx.events["PostUploaded"][0]["hash"] == hash
     assert tx.events["PostUploaded"][0]["description"] == description
-    assert tx.events["PostUploaded"][0]["tips"] == 0
     assert tx.events["PostUploaded"][0]["owner"] == account
 
     post = decentragram.posts(0)
@@ -39,6 +38,33 @@ def test_can_upload_post():
     assert post["hash"] == hash
     assert post["description"] == description
     assert post["owner"] == account
+
+
+def test_can_get_uploaded_posts():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    acc1 = get_account()
+    acc2 = get_account(index=2)
+    decentragram = deploy_decentragram()
+    hash = "randomhash"
+    description = "here is your description"
+
+    decentragram.uploadPost(hash, description, {"from": acc1})
+    decentragram.uploadPost(hash, description, {"from": acc2})
+    decentragram.uploadPost(hash, description, {"from": acc1})
+    decentragram.uploadPost(hash, description, {"from": acc1})
+    decentragram.uploadPost(hash, description, {"from": acc2})
+    acc1Posts = decentragram.getPostsFromOwner(acc1)
+    acc2Posts = decentragram.getPostsFromOwner(acc2)
+    anyPost = decentragram.posts(0)
+
+    assert decentragram.postCount() == 5
+    assert decentragram.ownerToPostCount(acc1) == 3
+    assert decentragram.ownerToPostCount(acc2) == 2
+    assert acc1Posts[0] == anyPost
+
+    anotherPost = decentragram.posts(1)
+    assert acc2Posts[0] == anotherPost
 
 
 def test_try_uploading_post_without_hash():
