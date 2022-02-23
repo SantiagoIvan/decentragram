@@ -5,15 +5,31 @@ export const ConnectButton = styled.button`
     margin-right: 2rem;
     border-radius: 12px;
     padding: 10px 24px;
-    background-color: #e0792a;
-    color: #23394d;
+    border: 1px solid #e1306c;
+    color: #e1306c;
     font-weight: bold;
-    border: none;
     cursor: pointer;
+    transition: 0.5s all ease;
 
     &:hover{
         transition: 0.5s all ease;
-        color: #e0792a;
-        background-color: #23394d;
+        color: whitesmoke;
+        background-color: #e1306c;
+    }
+`
+
+export const TipButton = styled.button`
+    background: #e1306c;
+    font-size: 2rem;
+    border-radius: 30%;
+    border: none;
+    color: black;
+    transition: 0.5s all ease;
+    font-family: 'Redressed', cursive;
+
+    &:hover {
+        transition: 0.5s all ease;
+        color: white;
+        cursor: pointer;
     }
 `

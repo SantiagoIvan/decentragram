@@ -110,9 +110,7 @@ def test_can_tip_post():
     post = decentragram.posts(0)
 
     assert post["tips"] == amount
-    assert tx2.events["PostTipped"][0]["id"] == 0
-    assert tx2.events["PostTipped"][0]["hash"] == hash
-    assert tx2.events["PostTipped"][0]["description"] == description
+    assert tx2.events["PostTipped"][0]["postId"] == 0
     assert tx2.events["PostTipped"][0]["tips"] == amount
     assert tx2.events["PostTipped"][0]["owner"] == account
 
@@ -130,3 +128,49 @@ def test_tip_post_that_doesnt_exists_raises_exception():
     amount = Web3.toWei(1, "ether")
     with pytest.raises(exceptions.VirtualMachineError):
         decentragram.tipPost(4, {"from": account, "value": amount})
+
+
+def test_user_withdraw_tips():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    account = get_account()
+    decentragram = deploy_decentragram()
+    hash = "randomhash"
+    description = "here is your description"
+    decentragram.uploadPost(hash, description, {"from": account})
+
+    acc2 = get_account(index=2)
+    decentragram.tipPost(0, {"from": acc2, "value": Web3.toWei(1, "ether")})
+    decentragram.withdrawTips(0, {"from": account})
+
+    post = decentragram.posts(0)
+    assert post["tips"] == 0
+    assert post["totalTipsReceived"] == Web3.toWei(1, "ether")
+
+
+def test_random_user_tries_withdraw_tips_but_fails():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    account = get_account()
+    decentragram = deploy_decentragram()
+    hash = "randomhash"
+    description = "here is your description"
+    decentragram.uploadPost(hash, description, {"from": account})
+    decentragram.tipPost(0, {"from": account, "value": Web3.toWei(1, "ether")})
+
+    random_user = get_account(index=2)
+    with pytest.raises(exceptions.VirtualMachineError):
+        decentragram.withdrawTips(0, {"from": random_user})
+
+
+def test_unable_to_tip_amount_of_0():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    account = get_account()
+    decentragram = deploy_decentragram()
+    hash = "randomhash"
+    description = "here is your description"
+    decentragram.uploadPost(hash, description, {"from": account})
+
+    with pytest.raises(exceptions.VirtualMachineError):
+        decentragram.tipPost(0, {"from": account})

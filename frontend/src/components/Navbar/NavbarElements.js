@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    background: #23394d;
-    width: 100%;
-    heigth: 70%;
+    background: inherits;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 `
 
 export const Wrapper = styled.div`
@@ -18,7 +17,7 @@ export const Wrapper = styled.div`
 `
 
 export const LogoContainer = styled.div`
-    margin-left: 0.5rem;
+    margin-left: 4rem;
     display:flex;
     align-items: center;
     font-size: 1.2rem;

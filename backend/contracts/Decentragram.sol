@@ -47,10 +47,8 @@ contract Decentragram is Ownable {
     );
 
     event PostTipped(
-        uint256 id,
+        uint256 postId,
         uint256 indexed tips,
-        string hash,
-        string description,
         address indexed from,
         address indexed owner
     );
@@ -77,20 +75,14 @@ contract Decentragram is Ownable {
 
     function tipPost(uint256 _id) external payable {
         require(_id >= 0 && _id < postCount);
+        require(msg.value > 0);
         Post memory post = posts[_id];
 
         post.tips += msg.value;
         post.totalTipsReceived += msg.value;
         posts[_id] = post;
 
-        emit PostTipped(
-            post.id,
-            post.tips,
-            post.hash,
-            post.description,
-            msg.sender,
-            post.owner
-        );
+        emit PostTipped(post.id, post.tips, msg.sender, post.owner);
     }
 
     function withdrawTips(uint256 _id) external {
