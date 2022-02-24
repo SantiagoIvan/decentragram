@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 export const PostContainer = styled.div`
@@ -47,9 +48,15 @@ export const PostDescription = styled.p`
     width: 100%;
     border: 2px solid black;
     margin: 1rem;
+    font-size: 1rem
 `
 
 export const TipButtonContainer = styled.div`
     display: flex;
     justify-content: center;
+`
+
+export const CustomLink = styled(Link)`
+    margin: 0;
+    padding: 0;
 `

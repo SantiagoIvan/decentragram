@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { Container, LogoContainer, Wrapper } from './NavbarElements'
@@ -10,6 +10,7 @@ import { useAppContext } from '../../context/appContext'
 const Navbar = () => {
     const navigate = useNavigate()
     const { account, setAccount } = useAppContext()
+    const nav = useRef(null)
 
     const handleLogoClick = () => {
         navigate("/")
@@ -29,8 +30,24 @@ const Navbar = () => {
         }
     }
 
+    useEffect(() => {
+        const listener = () => {
+            const el = document.getElementById("my-nav")
+            if (window.scrollY > 70) {//ese 70 lo saque con el inspector element.
+                if (!el.classList.contains("fixed-nav")) el.classList.add("fixed-nav")
+            } else {
+                if (el.classList.contains("fixed-nav")) el.classList.remove("fixed-nav")
+            }
+        }
+
+        window.addEventListener("scroll", listener)
+        return () => {
+            window.removeEventListener("scroll", listener)
+        }
+    }, [])
+
     return (
-        <Container>
+        <Container id="my-nav">
             <Wrapper>
                 <IconContext.Provider value={{ style: { fontSize: "2rem", color: "#e1306c" } }}>
                     <LogoContainer onClick={handleLogoClick}>
