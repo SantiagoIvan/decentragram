@@ -90,12 +90,12 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_fromIndex",
+                "name": "_page",
                 "type": "uint256"
             },
             {
                 "internalType": "uint256",
-                "name": "_toIndex",
+                "name": "_limit",
                 "type": "uint256"
             }
         ],

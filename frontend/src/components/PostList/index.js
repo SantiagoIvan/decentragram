@@ -1,9 +1,11 @@
 import React from 'react'
+
 import { SecondaryTitle } from '../Text'
 import Post from '../Post'
 import { ListContainer } from './ListContainer'
 
 const PostList = ({ posts }) => {
+
     return (
         <>
             <ListContainer>

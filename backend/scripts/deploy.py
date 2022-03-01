@@ -16,7 +16,7 @@ def upload_post():
     account = get_account()
     decentragram = Decentragram[-1]
 
-    for i in range(14):
+    for i in range(15):
         decentragram.uploadPost(
             "QmbqNoc7AjAwh5aB78ZnzaxGW37K149JfEEcyykJxAc2ft",
             "here is a picture from my last application!",

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { IconContext } from 'react-icons'
+import ReactPaginate from 'react-paginate';
 
 import { Main } from '../../components/Main'
 import { Title } from '../../components/Text'
@@ -22,28 +23,38 @@ const Home = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const descriptionRef = useRef()
 
-    const [posts, setPosts] = useState([])
+    const [posts, setPosts] = useState()
+    const [pageCount, setPageCount] = useState(null)
+    const [currentPage, setCurrentPage] = useState(1)
+    const limit = 10;
 
+    const handlePageClick = ({ selected }) => {
+        setCurrentPage(selected + 1)
+    }
+
+    //Data Loader
     const loadDataFromBlockchain = useCallback(async () => {
-        //primero me traigo los posts de la blockchain con los path
-        //luego hago por cada uno, el request a infura con la baseUrl + image.path
         try {
             const _postCount = await contract.postCount()
-            const _posts = await contract.getPosts(0, _postCount - 1)
+            setPageCount(Math.ceil(_postCount / limit))
+            const _posts = await contract.getPosts(currentPage, limit)
             setPosts(_posts)
         } catch (error) {
             console.log("Error fetching data", { error })
         }
-    }, [contract])
+    }, [contract, currentPage])
 
     useEffect(() => {
         if (!contract) return
         setLoading(true)
+        console.log("acaaa")
         loadDataFromBlockchain()
         setLoading(false)
-    }, [setLoading, contract, loadDataFromBlockchain])
+    }, [setLoading, contract, currentPage, loadDataFromBlockchain])
 
-    const handleNewPost = () => {
+
+    //NewPost
+    const handleNewPostButton = () => {
         setNewPostModalOpen(true)
     }
 
@@ -106,9 +117,28 @@ const Home = () => {
 
             <Title>Decentragram</Title>
             <IconContext.Provider value={{ style: { height: "3rem", width: "3rem" } }}>
-                <NewPostButton onClick={handleNewPost} />
+                <NewPostButton onClick={handleNewPostButton} />
             </IconContext.Provider>
             <PostList posts={posts} />
+            <ReactPaginate
+                previousLabel="<<"
+                nextLabel=">>"
+                breakLabel="..."
+                pageCount={pageCount}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClick}
+                containerClassName='pagination justify-content: center' //https://getbootstrap.com/docs/5.1/components/pagination/
+                pageClassName='page-item'
+                pageLinkClassName='page-link'
+                previousClassName='page-item'
+                nextClassName='page-item'
+                nextLinkClassName='page-link'
+                previousLinkClassName='page-link'
+                breakClassName='page-item'
+                breakLinkClassName='page-link'
+                activeClassName='active'
+            />
         </Main>
     )
 }

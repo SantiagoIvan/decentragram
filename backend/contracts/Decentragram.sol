@@ -105,24 +105,26 @@ contract Decentragram is Ownable {
     }
 
     function getPosts(
-        uint256 _fromIndex,
-        uint256 _toIndex /** intervalo cerrado */
+        uint256 _page,
+        uint256 _limit /** intervalo abierto al final */
     ) public view returns (Post[] memory) {
         require(postCount > 0, "No posts yet");
-        require(_toIndex >= _fromIndex, "To index > From Index");
-        require(_fromIndex < postCount, "Out of range!");
+        require(_page > 0, "Page must be greater than 0");
+        require(_limit > 0, "Limit must be greater than 0");
 
-        uint256 _quantity = 0;
-        if (_toIndex >= postCount) {
+        uint256 _startIndex = (_page - 1) * _limit;
+        uint256 _endIndex = _page * _limit; // no incluye el ultimo
+
+        require(_startIndex < postCount, "Out of range. Pagina no encontrada");
+        if (_endIndex > postCount) {
             //me estoy yendo del rango
-            _quantity = postCount - _fromIndex;
-        } else {
-            _quantity = (_toIndex - _fromIndex) + 1; //o lo hago '<=' en el for, seria lo mismo
+            _endIndex = postCount;
         }
+        uint256 _quantity = _endIndex - _startIndex;
 
         Post[] memory _filteredPosts = new Post[](_quantity);
         for (uint256 i = 0; i < _quantity; i++) {
-            _filteredPosts[i] = posts[_fromIndex + i];
+            _filteredPosts[i] = posts[_startIndex + i];
         }
 
         return _filteredPosts;

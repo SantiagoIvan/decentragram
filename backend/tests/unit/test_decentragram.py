@@ -91,14 +91,21 @@ def test_can_get_uploaded_posts_from_index():
     decentragram.uploadPost(path, description, {"from": acc2})
     decentragram.uploadPost(path, description, {"from": acc2})
 
-    posts1 = decentragram.getPosts(0, 4)
-    posts2 = decentragram.getPosts(10, 15)  # me trae hasta el index 13
-    posts3 = decentragram.getPosts(0, 9)
+    posts1 = decentragram.getPosts(1, 20)
+    posts2 = decentragram.getPosts(1, 5)  # me trae hasta el index 13
+    posts3 = decentragram.getPosts(1, 2)
+    posts4 = decentragram.getPosts(2, 7)
+    posts5 = decentragram.getPosts(4, 3)
 
     assert decentragram.postCount() == 14
-    assert len(posts1) == 5
-    assert len(posts2) == 4
-    assert len(posts3) == 10
+    assert len(posts1) == 14
+    assert len(posts2) == 5
+    assert len(posts3) == 2
+    assert len(posts4) == 7
+    assert posts4[0][0] == "7"
+    assert posts4[6][0] == "13"
+    assert posts5[0][0] == "9"
+    assert posts5[2][0] == "11"
 
 
 def test_try_uploading_post_without_path():
