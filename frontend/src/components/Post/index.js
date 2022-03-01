@@ -1,44 +1,19 @@
-import React, { useRef, useState } from 'react'
-import { BigNumber, utils } from 'ethers'
+import React from 'react'
+import { utils } from 'ethers'
 
-import { useAppContext } from '../../context/appContext'
+import { useModalContext } from '../../context/modalContext'
 import { CustomLink, TipButtonContainer, PostContainer, AvatarContainer, Avatar, PostTitle, ImageContainer, PostImage, PostDescription } from './PostElements'
 import { PrimaryButton } from '../Button'
-import Modal from '../Modal'
-import { Input, Label } from '../Modal/ModalElements'
 import { SecondaryTitle } from '../Text'
 
 // [TODO] cambiar el Custom Link para que vaya al perfil del usuario
 
 const Post = ({ post }) => {
-    const [tipModalOpen, setTipModalOpen] = useState(false)
-    const { provider, contract, setLoading } = useAppContext()
-    const tipRef = useRef()
+    const { setTipModalOpen, setPost } = useModalContext()
 
     const handleTipButton = () => {
+        setPost(post)
         setTipModalOpen(true)
-    }
-
-    const handleTipSubmit = async () => {
-        try {
-            setTipModalOpen(false)
-            setLoading(true)
-            const parsedNumber = utils.parseEther(tipRef.current.value)
-            // Ether -> Wei. Es decir, recibe un string representando una cantidad en Ether, y retorna
-            // un BigNumber representando la misma cantidad en Wei
-
-            const signer = await provider.getSigner()
-            const _id = BigNumber.from(post.id)
-
-            const tx = await contract.populateTransaction.tipPost(_id)
-            const execTx = await signer.sendTransaction({ ...tx, "value": parsedNumber })
-            await provider.waitForTransaction(execTx.hash)
-        } catch (error) {
-            alert("Transaction failed. Try again later")
-            console.log("Error: ", { error })
-        } finally {
-            setLoading(false)
-        }
     }
 
     /**
@@ -47,13 +22,6 @@ const Post = ({ post }) => {
      */
     return (
         <PostContainer>
-            <Modal header="Send some tips!" showModal={tipModalOpen} variant="tip" setModal={setTipModalOpen} >
-                <form >
-                    <Label htmlFor='amount'>Tips to send: </Label>
-                    <Input type="text" name="amount" id="amount" ref={tipRef} />
-                    <Input type="submit" onClick={handleTipSubmit} value="Send" />
-                </form>
-            </Modal>
             <AvatarContainer>
                 <CustomLink to="/">
                     <Avatar seed={post.owner.toLowerCase()} />

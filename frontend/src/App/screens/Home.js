@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { IconContext } from 'react-icons'
 import ReactPaginate from 'react-paginate';
 
@@ -6,23 +6,16 @@ import { Main } from '../../components/Main'
 import { Title } from '../../components/Text'
 import PostList from '../../components/PostList'
 import Loading from '../../components/Loading'
-import { NewPostButton, PrimaryButton } from '../../components/Button'
+import { NewPostButton } from '../../components/Button'
 
-import Modal from '../../components/Modal'
-import { Input, Label } from '../../components/Modal/ModalElements'
 import { useAppContext } from '../../context/appContext'
-
-import { create } from 'ipfs-http-client'
-import { Buffer } from 'buffer';
-
-const ipfs = create(process.env.REACT_APP_IPFS_CREATE)
+import { useModalContext } from '../../context/modalContext'
 
 const Home = () => {
-    const { loading, setLoading, contract, provider } = useAppContext()
-    const [newPostModalOpen, setNewPostModalOpen] = useState(false)
-    const [selectedFile, setSelectedFile] = useState(null);
-    const descriptionRef = useRef()
+    const { loading, setLoading, contract } = useAppContext()
+    const { setNewPostModalOpen } = useModalContext()
 
+    //paginacion
     const [posts, setPosts] = useState()
     const [pageCount, setPageCount] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
@@ -47,7 +40,6 @@ const Home = () => {
     useEffect(() => {
         if (!contract) return
         setLoading(true)
-        console.log("acaaa")
         loadDataFromBlockchain()
         setLoading(false)
     }, [setLoading, contract, currentPage, loadDataFromBlockchain])
@@ -58,36 +50,6 @@ const Home = () => {
         setNewPostModalOpen(true)
     }
 
-    const captureFile = (e) => {
-        const reader = new window.FileReader();
-        reader.readAsArrayBuffer(e.target.files[0]);
-        reader.onloadend = () => {
-            setSelectedFile(Buffer(reader.result))
-        }
-    }
-
-    const handleNewPostSubmit = async () => {
-        try {
-            setNewPostModalOpen(false)
-            setLoading(true)
-            const description = descriptionRef.current.value
-
-            // Guardo la imagen en IPFS
-            const result = await ipfs.add(selectedFile)
-
-            // me guardo el path en la blockchain junto con la descripcion
-            const signer = await provider.getSigner()
-            const tx = await contract.populateTransaction.uploadPost(result.path, description)
-            const execTx = await signer.sendTransaction({ ...tx })
-            await provider.waitForTransaction(execTx.hash)
-            alert("Done!")
-        } catch (error) {
-            console.log("Error: ", { error })
-        } finally {
-            setLoading(false)
-        }
-    }
-
     if (loading) {
         return <Main><Loading /></Main>
     }
@@ -96,24 +58,11 @@ const Home = () => {
     }
     return (
         <Main>
-            <form>
-                <Label htmlFor='myFile'>Select a file</Label>
-                <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
-                <Label htmlFor="description">Description</Label>
-                <Input type="text" name="description" id="description" ref={descriptionRef} required />
-                <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
-            </form>
             {/**TODO Lo puse aca porque en el Modal no me abre el buscador de archivos.
-             * Intente creando un input de boton que trigeree un click en un input file escondido 
+             * Intente creando un input type="button" que trigeree un click en un input file escondido 
              * para ver si asi me saltaba la ventaninta y tampoco
             */}
-            <Modal
-                header={"New Post"}
-                showModal={newPostModalOpen}
-                setModal={setNewPostModalOpen}
-                variant="newPost"
-            >
-            </Modal>
+
 
             <Title>Decentragram</Title>
             <IconContext.Provider value={{ style: { height: "3rem", width: "3rem" } }}>

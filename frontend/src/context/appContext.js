@@ -11,8 +11,6 @@ const AppContextProvider = ({ children }) => {
     const [contract, setContract] = useState(null)
     const [loading, setLoading] = useState(true)
     const [account, setAccount] = useState(null)
-    const [tipRequested, setTipRequested] = useState(false)
-    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         if (window.ethereum) {
@@ -36,11 +34,7 @@ const AppContextProvider = ({ children }) => {
                 provider,
                 setProvider,
                 contract,
-                setContract,
-                tipRequested,
-                setTipRequested,
-                isModalOpen,
-                setIsModalOpen
+                setContract
             }}
         >
             {children}

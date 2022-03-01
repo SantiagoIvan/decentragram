@@ -9,6 +9,7 @@ import {
 
 import './index.css'
 import { AppContextProvider } from './context/appContext'
+import { ModalContextProvider } from './context/modalContext'
 
 import App from './App';
 import Home from './App/screens/Home'
@@ -18,16 +19,17 @@ import NotFound from './App/screens/NotFound'
 ReactDOM.render(
   <React.StrictMode>
     <AppContextProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<App />}>
-            <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<NotFound />} />
-            {/**Creo que esta al pedo porque se redirecciona siempre si estas conectado o no*/}
-          </Route>
-        </Routes>
-      </Router>
+      <ModalContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<App />}>
+              <Route index element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </Router>
+      </ModalContextProvider>
     </AppContextProvider>
   </React.StrictMode>,
   document.getElementById('root')
