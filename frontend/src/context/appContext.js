@@ -7,11 +7,12 @@ const AppContext = React.createContext()
 
 
 const AppContextProvider = ({ children }) => {
-    const [loading, setLoading] = useState(true)
-    const [account, setAccount] = useState(null)
     const [provider, setProvider] = useState(null)
     const [contract, setContract] = useState(null)
-
+    const [loading, setLoading] = useState(true)
+    const [account, setAccount] = useState(null)
+    const [tipRequested, setTipRequested] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     useEffect(() => {
         if (window.ethereum) {
@@ -35,7 +36,11 @@ const AppContextProvider = ({ children }) => {
                 provider,
                 setProvider,
                 contract,
-                setContract
+                setContract,
+                tipRequested,
+                setTipRequested,
+                isModalOpen,
+                setIsModalOpen
             }}
         >
             {children}

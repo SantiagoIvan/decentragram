@@ -1,20 +1,20 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import Blockies from 'react-blockies'
 
 export const PostContainer = styled.div`
-    border: 2px solid red;
+    border: 2px solid black;
     margin: 2rem 0rem;
 `
 
 export const AvatarContainer = styled.div`
-    border: 2px solid green;
     display: flex;
     justify-content: space-around;
     margin-bottom: 0.5rem;
     align-items: center;
 `
 
-export const Avatar = styled.img`
+export const Avatar = styled(Blockies)`
     width: 40px;
     heigth: 40px;
     border-radius: 50%;
@@ -28,7 +28,6 @@ export const PostTitle = styled.h3`
 `
 
 export const ImageContainer = styled.div`
-    border: 2px solid violet;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -46,14 +45,14 @@ export const PostImage = styled.img`
 export const PostDescription = styled.p`
     font-family: 'Lobster', cursive;
     width: 100%;
-    border: 2px solid black;
     margin: 1rem;
     font-size: 1rem
 `
 
 export const TipButtonContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items:center;
 `
 
 export const CustomLink = styled(Link)`

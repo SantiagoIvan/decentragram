@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Blockies from 'react-blockies'
 
-import { Container, LogoContainer, Wrapper } from './NavbarElements'
+import { Container, LogoContainer, Wrapper, ConnectButtonContainer, MetamaskLogo } from './NavbarElements'
 import { FiInstagram } from 'react-icons/fi'
 import { IconContext } from 'react-icons'
 import { ConnectButton } from '../Button'
@@ -10,7 +11,6 @@ import { useAppContext } from '../../context/appContext'
 const Navbar = () => {
     const navigate = useNavigate()
     const { account, setAccount } = useAppContext()
-    const nav = useRef(null)
 
     const handleLogoClick = () => {
         navigate("/")
@@ -54,10 +54,12 @@ const Navbar = () => {
                         <FiInstagram />
                     </LogoContainer>
                 </IconContext.Provider>
-                <ConnectButton onClick={handleConnectButton}>
-                    {!account ? "Connect Wallet" : `Log out from ${account.slice(0, 10)}...`}
-                </ConnectButton>
-
+                <ConnectButtonContainer>
+                    {account ? <Blockies seed={account} /> : <MetamaskLogo src="metamask.svg" />}{/**TODO me tira warning */}
+                    <ConnectButton onClick={handleConnectButton}>
+                        {!account ? "Connect Wallet" : `Log out from ${account.slice(0, 10)}...`}
+                    </ConnectButton>
+                </ConnectButtonContainer>
             </Wrapper>
         </Container>
     )

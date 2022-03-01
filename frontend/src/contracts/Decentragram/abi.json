@@ -42,7 +42,7 @@
             {
                 "indexed": false,
                 "internalType": "string",
-                "name": "hash",
+                "name": "path",
                 "type": "string"
             },
             {
@@ -89,6 +89,62 @@
     {
         "inputs": [
             {
+                "internalType": "uint256",
+                "name": "_fromIndex",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "_toIndex",
+                "type": "uint256"
+            }
+        ],
+        "name": "getPosts",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "tips",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTipsReceived",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "path",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address payable",
+                        "name": "owner",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct Decentragram.Post[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "address",
                 "name": "_owner",
                 "type": "address"
@@ -115,7 +171,7 @@
                     },
                     {
                         "internalType": "string",
-                        "name": "hash",
+                        "name": "path",
                         "type": "string"
                     },
                     {
@@ -209,7 +265,7 @@
             },
             {
                 "internalType": "string",
-                "name": "hash",
+                "name": "path",
                 "type": "string"
             },
             {
@@ -243,7 +299,7 @@
         "inputs": [
             {
                 "internalType": "string",
-                "name": "_imgHash",
+                "name": "_imgPath",
                 "type": "string"
             },
             {

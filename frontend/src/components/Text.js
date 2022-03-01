@@ -3,9 +3,12 @@ import styled from 'styled-components'
 export const Title = styled.h1`
     font-weigth: bolder;
     color: brown;
+    font-size: 3rem;
+    font-family: 'Redressed', cursive;
 `
 
 export const SecondaryTitle = styled.h2`
     font-weigth: bolder;
-    color: black;
+    color: #e1306c;
+    font-family: 'Redressed', cursive;
 `

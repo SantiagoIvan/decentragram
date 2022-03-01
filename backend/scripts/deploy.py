@@ -1,4 +1,4 @@
-from brownie import Decentragram, network, config
+from brownie import Decentragram, accounts, network, config
 from scripts.utils import LOCAL_BLOCKCHAIN_ENVIROMENTS, get_account
 
 
@@ -10,6 +10,18 @@ def deploy_decentragram():
     )
 
     return decentragram
+
+
+def upload_post():
+    account = get_account()
+    decentragram = Decentragram[-1]
+
+    for i in range(14):
+        decentragram.uploadPost(
+            "QmbqNoc7AjAwh5aB78ZnzaxGW37K149JfEEcyykJxAc2ft",
+            "here is a picture from my last application!",
+            {"from": account},
+        )
 
 
 def main():

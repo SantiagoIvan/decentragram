@@ -21,39 +21,39 @@ def test_can_upload_post():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
 
-    tx = decentragram.uploadPost(hash, description, {"from": account})
+    tx = decentragram.uploadPost(path, description, {"from": account})
     assert decentragram.postCount() == 1
 
     assert tx.events["PostUploaded"][0]["id"] == 0
-    assert tx.events["PostUploaded"][0]["hash"] == hash
+    assert tx.events["PostUploaded"][0]["path"] == path
     assert tx.events["PostUploaded"][0]["description"] == description
     assert tx.events["PostUploaded"][0]["owner"] == account
 
     post = decentragram.posts(0)
     assert post["id"] == 0
     assert post["tips"] == 0
-    assert post["hash"] == hash
+    assert post["path"] == path
     assert post["description"] == description
     assert post["owner"] == account
 
 
-def test_can_get_uploaded_posts():
+def test_can_get_uploaded_posts_from_owner():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
         pytest.skip()
     acc1 = get_account()
     acc2 = get_account(index=2)
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
 
-    decentragram.uploadPost(hash, description, {"from": acc1})
-    decentragram.uploadPost(hash, description, {"from": acc2})
-    decentragram.uploadPost(hash, description, {"from": acc1})
-    decentragram.uploadPost(hash, description, {"from": acc1})
-    decentragram.uploadPost(hash, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
     acc1Posts = decentragram.getPostsFromOwner(acc1)
     acc2Posts = decentragram.getPostsFromOwner(acc2)
     anyPost = decentragram.posts(0)
@@ -67,16 +67,50 @@ def test_can_get_uploaded_posts():
     assert acc2Posts[0] == anotherPost
 
 
-def test_try_uploading_post_without_hash():
+def test_can_get_uploaded_posts_from_index():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    acc1 = get_account()
+    acc2 = get_account(index=2)
+    decentragram = deploy_decentragram()
+    path = "randompath"
+    description = "here is your description"
+
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+
+    posts1 = decentragram.getPosts(0, 4)
+    posts2 = decentragram.getPosts(10, 15)  # me trae hasta el index 13
+    posts3 = decentragram.getPosts(0, 9)
+
+    assert decentragram.postCount() == 14
+    assert len(posts1) == 5
+    assert len(posts2) == 4
+    assert len(posts3) == 10
+
+
+def test_try_uploading_post_without_path():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = ""
+    path = ""
     description = "here is your description"
 
     with pytest.raises(exceptions.VirtualMachineError):
-        tx = decentragram.uploadPost(hash, description, {"from": account})
+        tx = decentragram.uploadPost(path, description, {"from": account})
 
     assert decentragram.postCount() == 0
 
@@ -86,11 +120,11 @@ def test_try_uploading_post_without_description():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = ""
 
     with pytest.raises(exceptions.VirtualMachineError):
-        tx = decentragram.uploadPost(hash, description, {"from": account})
+        tx = decentragram.uploadPost(path, description, {"from": account})
 
     assert decentragram.postCount() == 0
 
@@ -100,9 +134,9 @@ def test_can_tip_post():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
-    tx1 = decentragram.uploadPost(hash, description, {"from": account})
+    tx1 = decentragram.uploadPost(path, description, {"from": account})
     tx1.wait(1)
 
     amount = Web3.toWei(1, "ether")
@@ -120,9 +154,9 @@ def test_tip_post_that_doesnt_exists_raises_exception():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
-    tx1 = decentragram.uploadPost(hash, description, {"from": account})
+    tx1 = decentragram.uploadPost(path, description, {"from": account})
     tx1.wait(1)
 
     amount = Web3.toWei(1, "ether")
@@ -135,9 +169,9 @@ def test_user_withdraw_tips():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
-    decentragram.uploadPost(hash, description, {"from": account})
+    decentragram.uploadPost(path, description, {"from": account})
 
     acc2 = get_account(index=2)
     decentragram.tipPost(0, {"from": acc2, "value": Web3.toWei(1, "ether")})
@@ -153,9 +187,9 @@ def test_random_user_tries_withdraw_tips_but_fails():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
-    decentragram.uploadPost(hash, description, {"from": account})
+    decentragram.uploadPost(path, description, {"from": account})
     decentragram.tipPost(0, {"from": account, "value": Web3.toWei(1, "ether")})
 
     random_user = get_account(index=2)
@@ -168,9 +202,9 @@ def test_unable_to_tip_amount_of_0():
         pytest.skip()
     account = get_account()
     decentragram = deploy_decentragram()
-    hash = "randomhash"
+    path = "randompath"
     description = "here is your description"
-    decentragram.uploadPost(hash, description, {"from": account})
+    decentragram.uploadPost(path, description, {"from": account})
 
     with pytest.raises(exceptions.VirtualMachineError):
         decentragram.tipPost(0, {"from": account})

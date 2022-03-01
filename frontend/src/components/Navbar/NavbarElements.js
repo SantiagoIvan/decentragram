@@ -24,3 +24,13 @@ export const LogoContainer = styled.div`
     font-family: sans-serif;
     cursor: pointer;
 `
+
+export const ConnectButtonContainer = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+export const MetamaskLogo = styled.img`
+    heigth: 32px;
+    width: 32px;
+`

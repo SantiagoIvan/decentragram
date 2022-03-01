@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AiOutlinePlusCircle } from 'react-icons/ai'
 
 export const ConnectButton = styled.button`
     margin: 1rem;
@@ -18,7 +19,7 @@ export const ConnectButton = styled.button`
     }
 `
 
-export const TipButton = styled.button`
+export const PrimaryButton = styled.button`
     background: #e1306c;
     font-size: 2rem;
     border-radius: 30%;
@@ -30,6 +31,17 @@ export const TipButton = styled.button`
     &:hover {
         transition: 0.5s all ease;
         color: white;
+        cursor: pointer;
+    }
+`
+
+export const NewPostButton = styled(AiOutlinePlusCircle)`
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
+    color: #e1306c;
+
+    &:hover {
         cursor: pointer;
     }
 `

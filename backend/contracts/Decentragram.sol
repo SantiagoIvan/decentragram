@@ -31,17 +31,17 @@ contract Decentragram is Ownable {
         uint256 id;
         uint256 tips;
         uint256 totalTipsReceived;
-        string hash;
+        string path;
         string description;
         address payable owner;
     }
     uint256 public postCount;
-    mapping(address => uint256) public ownerToPostCount;
+    mapping(address => uint256) public ownerToPostCount; // para en un futuro en el perfil de una persona y traer todos los posts de esa
     Post[] public posts;
 
     event PostUploaded(
         uint256 indexed id,
-        string hash,
+        string path,
         string description,
         address indexed owner
     );
@@ -55,27 +55,31 @@ contract Decentragram is Ownable {
 
     event TipsWithdrawed(uint256 id, address owner, uint256 amount);
 
-    function uploadPost(string memory _imgHash, string memory _description)
+    function uploadPost(string memory _imgPath, string memory _description)
         public
     {
         //Para asegurarse de que no me mandan cosas vacias
-        require(bytes(_imgHash).length > 0);
-        require(bytes(_description).length > 0);
+        require(bytes(_imgPath).length > 0, "Path empty!");
+        require(bytes(_description).length > 0, "Description empty");
         require(msg.sender != address(0));
 
         posts.push(
-            Post(postCount, 0, 0, _imgHash, _description, payable(msg.sender))
+            Post(postCount, 0, 0, _imgPath, _description, payable(msg.sender))
         );
         ownerToPostCount[msg.sender] += 1;
 
         //Como comunicar al frontend que fue creado exitosamente? Mediante un evento
-        emit PostUploaded(postCount, _imgHash, _description, msg.sender);
+        emit PostUploaded(postCount, _imgPath, _description, msg.sender);
         postCount++;
     }
 
     function tipPost(uint256 _id) external payable {
-        require(_id >= 0 && _id < postCount);
-        require(msg.value > 0);
+        require(postCount > 0, "No posts yet!");
+        require(_id >= 0 && _id < postCount, "The id is incorrect!");
+        require(
+            msg.value > 0,
+            "If you are gonna tip someone, please give him some money"
+        );
         Post memory post = posts[_id];
 
         post.tips += msg.value;
@@ -86,7 +90,7 @@ contract Decentragram is Ownable {
     }
 
     function withdrawTips(uint256 _id) external {
-        require(_id >= 0 && _id < postCount);
+        require(_id >= 0 && _id < postCount, "The id is incorrect!");
 
         Post memory post = posts[_id];
 
@@ -98,6 +102,30 @@ contract Decentragram is Ownable {
         posts[_id] = post;
 
         emit TipsWithdrawed(_id, msg.sender, _amount);
+    }
+
+    function getPosts(
+        uint256 _fromIndex,
+        uint256 _toIndex /** intervalo cerrado */
+    ) public view returns (Post[] memory) {
+        require(postCount > 0, "No posts yet");
+        require(_toIndex >= _fromIndex, "To index > From Index");
+        require(_fromIndex < postCount, "Out of range!");
+
+        uint256 _quantity = 0;
+        if (_toIndex >= postCount) {
+            //me estoy yendo del rango
+            _quantity = postCount - _fromIndex;
+        } else {
+            _quantity = (_toIndex - _fromIndex) + 1; //o lo hago '<=' en el for, seria lo mismo
+        }
+
+        Post[] memory _filteredPosts = new Post[](_quantity);
+        for (uint256 i = 0; i < _quantity; i++) {
+            _filteredPosts[i] = posts[_fromIndex + i];
+        }
+
+        return _filteredPosts;
     }
 
     function getPostsFromOwner(address _owner)
