@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { IconContext } from 'react-icons'
-import ReactPaginate from 'react-paginate';
 
 import { Main } from '../../components/Main'
 import { Title } from '../../components/Text'
-import PostList from '../../components/PostList'
+import PaginatedList from '../../components/PostList/PaginatedList'
 import Loading from '../../components/Loading'
 import { NewPostButton } from '../../components/Button'
 
@@ -58,36 +57,11 @@ const Home = () => {
     }
     return (
         <Main>
-            {/**TODO Lo puse aca porque en el Modal no me abre el buscador de archivos.
-             * Intente creando un input type="button" que trigeree un click en un input file escondido 
-             * para ver si asi me saltaba la ventaninta y tampoco
-            */}
-
-
             <Title>Decentragram</Title>
             <IconContext.Provider value={{ style: { height: "3rem", width: "3rem" } }}>
                 <NewPostButton onClick={handleNewPostButton} />
             </IconContext.Provider>
-            <PostList posts={posts} />
-            <ReactPaginate
-                previousLabel="<<"
-                nextLabel=">>"
-                breakLabel="..."
-                pageCount={pageCount}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={2}
-                onPageChange={handlePageClick}
-                containerClassName='pagination justify-content: center' //https://getbootstrap.com/docs/5.1/components/pagination/
-                pageClassName='page-item'
-                pageLinkClassName='page-link'
-                previousClassName='page-item'
-                nextClassName='page-item'
-                nextLinkClassName='page-link'
-                previousLinkClassName='page-link'
-                breakClassName='page-item'
-                breakLinkClassName='page-link'
-                activeClassName='active'
-            />
+            <PaginatedList posts={posts} pageCount={pageCount} handlePageClick={handlePageClick} />
         </Main>
     )
 }

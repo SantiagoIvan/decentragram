@@ -17,7 +17,9 @@ const ModalContextProvider = ({ children }) => {
                 tipModalOpen,
                 setTipModalOpen,
                 post,
-                setPost
+                setPost,
+                selectedFile,
+                setSelectedFile
             }}
         >
             {children}

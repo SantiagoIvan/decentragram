@@ -28,6 +28,8 @@ export const LogoContainer = styled.div`
 export const ConnectButtonContainer = styled.div`
     display: flex;
     align-items: center;
+    padding: 0rem 1rem;
+    justift-content: space-around;
 `
 
 export const MetamaskLogo = styled.img`

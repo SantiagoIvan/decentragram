@@ -12,3 +12,10 @@ export const SecondaryTitle = styled.h2`
     color: #e1306c;
     font-family: 'Redressed', cursive;
 `
+
+export const Text = styled.p`
+    font-weigth: bolder;
+    color: #e1306c;
+    font-family: 'Redressed', cursive;
+    font-size: 1.2rem;
+`

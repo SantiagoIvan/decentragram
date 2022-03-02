@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Blockies from 'react-blockies'
 
 import { Container, LogoContainer, Wrapper, ConnectButtonContainer, MetamaskLogo } from './NavbarElements'
@@ -55,9 +55,9 @@ const Navbar = () => {
                     </LogoContainer>
                 </IconContext.Provider>
                 <ConnectButtonContainer>
-                    {account ? <Blockies seed={account} /> : <MetamaskLogo src="metamask.svg" />}{/**TODO me tira warning */}
+                    {account ? <Link to={`/users/${account}`} ><Blockies seed={account} /></Link> : <MetamaskLogo src="metamask.svg" />}
                     <ConnectButton onClick={handleConnectButton}>
-                        {!account ? "Connect Wallet" : `Log out from ${account.slice(0, 10)}...`}
+                        {!account ? "Connect Wallet" : `Log out: ${account.slice(0, 10)}...`}
                     </ConnectButton>
                 </ConnectButtonContainer>
             </Wrapper>

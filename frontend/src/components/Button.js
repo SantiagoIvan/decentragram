@@ -20,19 +20,17 @@ export const ConnectButton = styled.button`
 `
 
 export const PrimaryButton = styled.button`
-    background: #e1306c;
+    background: ${({ disabled }) => disabled ? "grey" : "#e1306c"};
     font-size: 2rem;
     border-radius: 30%;
     border: none;
     color: black;
-    transition: 0.5s all ease;
+    transition: ${({ disabled }) => disabled ? "none" : "0.5s all ease"};
     font-family: 'Redressed', cursive;
 
-    &:hover {
-        transition: 0.5s all ease;
-        color: white;
-        cursor: pointer;
-    }
+    ${({ disabled }) => !disabled &&
+        "&:hover {transition: 0.5s all ease; color: white; cursor: pointer;}"};
+    
 `
 
 export const NewPostButton = styled(AiOutlinePlusCircle)`

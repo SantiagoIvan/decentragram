@@ -9,6 +9,7 @@ import { useAppContext } from '../context/appContext'
 import { useModalContext } from '../context/modalContext'
 import { Input, Label } from '../components/Modal/ModalElements'
 import Modal from '../components/Modal'
+import { Buffer } from 'buffer'
 
 const ipfs = create(process.env.REACT_APP_IPFS_CREATE)
 
@@ -33,9 +34,8 @@ const App = () => {
             // un BigNumber representando la misma cantidad en Wei
 
             const signer = await provider.getSigner()
-            const _id = BigNumber.from(post.id)
 
-            const tx = await contract.populateTransaction.tipPost(_id)
+            const tx = await contract.populateTransaction.tipPost(post.id)
             const execTx = await signer.sendTransaction({ ...tx, "value": parsedNumber })
             await provider.waitForTransaction(execTx.hash)
         } catch (error) {
@@ -79,34 +79,37 @@ const App = () => {
     return (
         <>
             <Modal header="Send some tips!" showModal={tipModalOpen} variant="tip" setModal={setTipModalOpen} >
-                <form >
-                    <Label htmlFor='amount'>Tips to send: </Label>
-                    <Input type="text" name="amount" id="amount" ref={tipRef} />
-                    <Input type="submit" onClick={handleTipSubmit} value="Send" />
-                </form>
+
+                <Label htmlFor='amount'>Tips to send: </Label>
+                <Input type="text" name="amount" id="amount" ref={tipRef} />
+                <Input type="submit" onClick={handleTipSubmit} value="Send" />
+
             </Modal>
+
+
             <Modal
                 header={"New Post"}
                 showModal={newPostModalOpen}
                 setModal={setNewPostModalOpen}
                 variant="newPost"
-            >{/**TODO si meto el form aca adentro, no puedo abrir al buscador de archivos. No me deja */}
-                <form>
-                    <Label htmlFor='myFile'>Select a file</Label>
-                    <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
-                    <Label htmlFor="description">Description</Label>
-                    <Input type="text" name="description" id="description" ref={descriptionRef} required />
-                    <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
-                </form>
-            </Modal>
-            <Navbar />{/**SI METO EL FORM ACA, ME RECONOCE EL CLICK SOBRE EL BOTON DE BUSCADOR DE ARCHIVOS */}
-            <form>
+            >
                 <Label htmlFor='myFile'>Select a file</Label>
                 <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
                 <Label htmlFor="description">Description</Label>
                 <Input type="text" name="description" id="description" ref={descriptionRef} required />
                 <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
-            </form>
+            </Modal>
+            <Navbar />
+            {/**TODO Lo puse aca porque en el Modal no me abre el buscador de archivos.
+             * Intente creando un input type="button" que trigeree un click en un input file escondido 
+             * para ver si asi me saltaba la ventaninta y tampoco
+            */}
+            <Label htmlFor='myFile'>Select a file</Label>
+            <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
+            <Label htmlFor="description">Description</Label>
+            <Input type="text" name="description" id="description" ref={descriptionRef} required />
+            <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
+
             <Outlet />
         </>
     )

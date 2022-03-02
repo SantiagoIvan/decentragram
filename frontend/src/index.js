@@ -15,6 +15,7 @@ import App from './App';
 import Home from './App/screens/Home'
 import Login from './App/screens/Login'
 import NotFound from './App/screens/NotFound'
+import User from './App/screens/User'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.render(
           <Routes>
             <Route path="/" element={<App />}>
               <Route index element={<Home />} />
+              <Route path='users/:userPublicKey' element={<User />} />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<NotFound />} />
             </Route>

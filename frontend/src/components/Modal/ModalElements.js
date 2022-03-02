@@ -59,9 +59,12 @@ export const ModalInput = styled.input`
 `
 
 export const Label = styled.label`
-    margin: 1rem;
+    margin: 0.5rem;
+    font-weight: bolder;
+    font-size: 1.5rem;
+    font-family: 'Redressed', cursive
 `
 
 export const Input = styled.input`
-    margin: 1rem;
+    margin: .5rem;
 `

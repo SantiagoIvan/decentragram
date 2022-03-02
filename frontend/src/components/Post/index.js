@@ -2,28 +2,43 @@ import React from 'react'
 import { utils } from 'ethers'
 
 import { useModalContext } from '../../context/modalContext'
+import { useAppContext } from '../../context/appContext'
 import { CustomLink, TipButtonContainer, PostContainer, AvatarContainer, Avatar, PostTitle, ImageContainer, PostImage, PostDescription } from './PostElements'
 import { PrimaryButton } from '../Button'
-import { SecondaryTitle } from '../Text'
+import { SecondaryTitle, Text } from '../Text'
 
 // [TODO] cambiar el Custom Link para que vaya al perfil del usuario
 
 const Post = ({ post }) => {
     const { setTipModalOpen, setPost } = useModalContext()
+    const { account, setLoading, contract, provider } = useAppContext()
 
     const handleTipButton = () => {
         setPost(post)
         setTipModalOpen(true)
     }
 
-    /**
-     * https://mui.com/components/transitions/#performance-amp-seo para el tema de que se desmonte todas las intancias
-     * que no estan siendo mostradas onChange={(e) => setTipToSend(e.target.value)}
-     */
+
+    const handleWithdrawTipsClick = async () => {
+        try {
+            setLoading(true)
+
+            const signer = await provider.getSigner()
+            const tx = await contract.populateTransaction.withdrawTips(post.id)
+            const execTx = await signer.sendTransaction({ ...tx })
+            await provider.waitForTransaction(execTx.hash)
+            alert("Done!")
+        } catch (error) {
+            console.log("Error withdraing tips. ", { error })
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <PostContainer>
             <AvatarContainer>
-                <CustomLink to="/">
+                <CustomLink to={`/users/${post.owner}`}>
                     <Avatar seed={post.owner.toLowerCase()} />
                 </CustomLink>
                 <PostTitle>{post.owner.toString().slice(0, 20) + "..."}</PostTitle>
@@ -33,8 +48,14 @@ const Post = ({ post }) => {
                 <PostDescription >{post.description}</PostDescription>
             </ImageContainer>
             <TipButtonContainer>
-                <PrimaryButton onClick={handleTipButton}>+ Tip</PrimaryButton>
-                <SecondaryTitle>Tips: {utils.formatEther(post.tips)}</SecondaryTitle>
+                {account && post.owner.toLowerCase() !== account.toLowerCase() ?
+                    <PrimaryButton onClick={handleTipButton}>+ Tip</PrimaryButton> :
+                    <>
+                        <PrimaryButton disabled={utils.formatEther(post.tips) === "0.0"} onClick={handleWithdrawTipsClick}>Withdraw</PrimaryButton>
+                        <Text>$ {utils.formatEther(post.tips)}</Text>
+                    </>
+                }
+                <Text>Total $ {utils.formatEther(post.totalTipsReceived)}</Text>
             </TipButtonContainer>
         </PostContainer >
     )
