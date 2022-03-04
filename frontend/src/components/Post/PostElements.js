@@ -19,6 +19,11 @@ export const Avatar = styled(Blockies)`
     heigth: 40px;
     border-radius: 50%;
     margin-left: 0.5rem;
+    transition: box-shadow linear 0.5s;
+    border: none;
+    &:hover{
+        box-shadow: 0 0 50px #e1306c;
+    }
 `
 
 export const PostTitle = styled.h3`
@@ -40,6 +45,12 @@ export const PostImage = styled.img`
     width: 100%;
     max-width: 400px;
     heigth: 100%;
+    cursor: pointer;
+    transition: box-shadow linear 0.5s;
+    border: none;
+    &:hover{
+        box-shadow: 0 0 50px #e1306c;
+    }
 `
 
 export const PostDescription = styled.p`

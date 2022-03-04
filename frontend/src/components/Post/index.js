@@ -5,12 +5,12 @@ import { useModalContext } from '../../context/modalContext'
 import { useAppContext } from '../../context/appContext'
 import { CustomLink, TipButtonContainer, PostContainer, AvatarContainer, Avatar, PostTitle, ImageContainer, PostImage, PostDescription } from './PostElements'
 import { PrimaryButton } from '../Button'
-import { SecondaryTitle, Text } from '../Text'
+import { Text } from '../Text'
 
 // [TODO] cambiar el Custom Link para que vaya al perfil del usuario
 
 const Post = ({ post }) => {
-    const { setTipModalOpen, setPost } = useModalContext()
+    const { setTipModalOpen, setPost, setImageModalOpen } = useModalContext()
     const { account, setLoading, contract, provider } = useAppContext()
 
     const handleTipButton = () => {
@@ -18,6 +18,10 @@ const Post = ({ post }) => {
         setTipModalOpen(true)
     }
 
+    const handleImageClick = () => {
+        setPost(post)
+        setImageModalOpen(true)
+    }
 
     const handleWithdrawTipsClick = async () => {
         try {
@@ -44,7 +48,7 @@ const Post = ({ post }) => {
                 <PostTitle>{post.owner.toString().slice(0, 20) + "..."}</PostTitle>
             </AvatarContainer>
             <ImageContainer>
-                <PostImage src={process.env.REACT_APP_IPFS_BASE_URL + post.path} />
+                <PostImage src={process.env.REACT_APP_IPFS_BASE_URL + post.path} onClick={handleImageClick} />
                 <PostDescription >{post.description}</PostDescription>
             </ImageContainer>
             <TipButtonContainer>

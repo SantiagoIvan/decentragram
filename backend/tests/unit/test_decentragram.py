@@ -67,7 +67,7 @@ def test_can_get_uploaded_posts_from_owner():
     assert acc2Posts[0] == anotherPost
 
 
-def test_can_get_uploaded_posts_from_index():
+def test_can_get_paginated_posts():
     if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
         pytest.skip()
     acc1 = get_account()
@@ -106,6 +106,111 @@ def test_can_get_uploaded_posts_from_index():
     assert posts4[6][0] == "13"
     assert posts5[0][0] == "9"
     assert posts5[2][0] == "11"
+
+
+def test_can_get_paginated_posts_from_the_latest():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    acc1 = get_account()
+    acc2 = get_account(index=2)
+    decentragram = deploy_decentragram()
+    path = "randompath"
+    description = "here is your description"
+
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+
+    posts1 = decentragram.getPostsFromTheLatest(1, 20)
+    posts2 = decentragram.getPostsFromTheLatest(1, 5)
+    posts3 = decentragram.getPostsFromTheLatest(1, 2)
+    posts4 = decentragram.getPostsFromTheLatest(2, 7)
+    posts5 = decentragram.getPostsFromTheLatest(4, 3)
+    posts6 = decentragram.getPostsFromTheLatest(5, 3)
+    posts7 = decentragram.getPostsFromTheLatest(3, 6)
+
+    assert decentragram.postCount() == 14
+    assert len(posts1) == 14
+    assert len(posts2) == 5
+    assert len(posts3) == 2
+    assert len(posts4) == 7
+    assert len(posts6) == 2
+    assert len(posts7) == 2
+    assert posts1[0][0] == "13"
+    assert posts1[13][0] == "0"
+    assert posts4[0][0] == "6"
+    assert posts4[6][0] == "0"
+    assert posts5[0][0] == "4"
+    assert posts5[1][0] == "3"
+    assert posts5[2][0] == "2"
+    assert posts6[0][0] == "1"
+    assert posts6[1][0] == "0"
+    assert posts7[0][0] == "1"
+    assert posts7[1][0] == "0"
+
+
+def test_can_get_paginated_posts_from_the_latest_from_owner():
+    if network.show_active() not in LOCAL_BLOCKCHAIN_ENVIROMENTS:
+        pytest.skip()
+    acc1 = get_account()
+    acc2 = get_account(index=2)
+    decentragram = deploy_decentragram()
+    path = "randompath"
+    description = "here is your description"
+
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc2})
+    decentragram.uploadPost(path, description, {"from": acc2})  # id: 13
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})
+    decentragram.uploadPost(path, description, {"from": acc1})  # id: 18
+    # total 19 items
+    # acc1: 13 items
+    # acc2: 6 items
+
+    posts1 = decentragram.getPostsFromTheLatestFromOwner(acc1, 1, 10)
+    posts2 = decentragram.getPostsFromTheLatestFromOwner(acc2, 1, 10)
+    posts3 = decentragram.getPostsFromTheLatestFromOwner(acc2, 2, 5)
+    posts4 = decentragram.getPostsFromTheLatestFromOwner(acc2, 1, 5)
+
+    assert len(posts1) == 10
+    assert posts1[0][0] == "18"
+    assert posts1[9][0] == "5"
+
+    assert len(posts2) == 6
+    assert posts2[0][0] == "13"
+    assert posts2[5][0] == "2"
+
+    assert len(posts3) == 1
+    assert posts3[0][0] == "2"
+
+    assert len(posts4) == 5
+    assert posts4[0][0] == "13"
+    assert posts4[4][0] == "3"
 
 
 def test_try_uploading_post_without_path():

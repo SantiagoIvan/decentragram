@@ -17,7 +17,7 @@ const AppContextProvider = ({ children }) => {
             const _provider = new providers.Web3Provider(window.ethereum, 'any')
             const _contract = Decentragram({
                 provider: _provider,
-                address: process.env.REACT_APP_CONTRACT_ADDRESS
+                address: process.env.REACT_APP_RINKEBY_CONTRACT_ADDRESS
             })
             setProvider(_provider)
             setContract(_contract)

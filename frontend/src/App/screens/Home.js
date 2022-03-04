@@ -18,7 +18,7 @@ const Home = () => {
     const [posts, setPosts] = useState()
     const [pageCount, setPageCount] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
-    const limit = 10;
+    const limit = 3;
 
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected + 1)
@@ -29,7 +29,7 @@ const Home = () => {
         try {
             const _postCount = await contract.postCount()
             setPageCount(Math.ceil(_postCount / limit))
-            const _posts = await contract.getPosts(currentPage, limit)
+            const _posts = await contract.getPostsFromTheLatest(currentPage, limit)
             setPosts(_posts)
         } catch (error) {
             console.log("Error fetching data", { error })

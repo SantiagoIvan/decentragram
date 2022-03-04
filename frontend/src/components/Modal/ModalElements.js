@@ -21,8 +21,9 @@ export const Overlay = styled.div`
 export const ModalContainer = styled.div`
     position: relative;
     width: 80%;
-    max-width: 500px;
+    max-width:600px;
     height: auto;
+    max-height: 600px;
     border-radius: 5px;
     z-index:3;
     background: whitesmoke;
@@ -51,12 +52,6 @@ export const ModalContent = styled.div`
     flex-direction: column;
     align-items: center;
 `
-export const ModalForm = styled.form`
-    
-`
-
-export const ModalInput = styled.input`
-`
 
 export const Label = styled.label`
     margin: 0.5rem;
@@ -67,4 +62,9 @@ export const Label = styled.label`
 
 export const Input = styled.input`
     margin: .5rem;
+`
+
+export const ModalImage = styled.img`
+    width: 100%;
+    heigth: 100%;
 `

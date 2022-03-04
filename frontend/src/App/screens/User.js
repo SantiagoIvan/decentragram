@@ -25,12 +25,12 @@ const User = () => {
         try {
             const _postCount = await contract.ownerToPostCount(params.userPublicKey)
             setPageCount(Math.ceil(_postCount / limit))
-            const _posts = await contract.getPostsFromOwner(params.userPublicKey)
+            const _posts = await contract.getPostsFromTheLatestFromOwner(params.userPublicKey, currentPage, limit)
             setPosts(_posts)
         } catch (error) {
             console.log("Error fetching data", { error })
         }
-    }, [contract, params.userPublicKey])
+    }, [contract, currentPage, params.userPublicKey])
 
     useEffect(() => {
         if (!contract) return

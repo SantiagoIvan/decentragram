@@ -130,6 +130,79 @@ contract Decentragram is Ownable {
         return _filteredPosts;
     }
 
+    function getPostsFromTheLatest(
+        int256 _page,
+        int256 _limit /** intervalo abierto al final */
+    ) public view returns (Post[] memory) {
+        require(postCount > 0, "No posts yet");
+        require(_page > 0, "Page must be greater than 0");
+        require(_limit > 0, "Limit must be greater than 0");
+
+        int256 _startIndex = int256(postCount) - 1 - (_page - 1) * _limit;
+        int256 _endIndex = _startIndex - _limit; // no incluye el ultimo
+
+        require(_startIndex >= 0, "Out of range. Pagina no encontrada");
+        if (_endIndex < 0) {
+            //me estoy yendo del rango. Lo seteo en -1, cosa de ir barriendo al reves,
+            //y cuando incluya al index 0, me detenga ahi. o puedo setearlo en 0 y cambiar la condicion de corte
+            //es lo mismo
+            _endIndex = -1;
+        }
+        uint256 _quantity = uint256(_startIndex - _endIndex);
+
+        Post[] memory _filteredPosts = new Post[](_quantity);
+        for (uint256 i = 0; i < _quantity; i++) {
+            _filteredPosts[i] = posts[uint256(_startIndex) - i];
+        }
+
+        return _filteredPosts;
+    }
+
+    function getPostsFromTheLatestFromOwner(
+        address _owner,
+        int256 _page,
+        int256 _limit
+    ) public view returns (Post[] memory) {
+        require(ownerToPostCount[_owner] > 0, "That owner has no posts");
+        require(_page > 0, "Page must be greater than 0");
+        require(_limit > 0, "Limit must be greater than 0");
+
+        Post[] memory _filteredPosts = new Post[](ownerToPostCount[_owner]);
+
+        uint256 _counter = 0;
+
+        for (uint256 i = 0; i < postCount; i++) {
+            if (posts[i].owner == _owner) {
+                _filteredPosts[_counter] = posts[i];
+                _counter++;
+            }
+            if (_counter >= ownerToPostCount[_owner]) {
+                break;
+            }
+        }
+
+        //Hasta aca tendria todos los posts del usuario, ahora tengo que paginarlos
+        int256 _startIndex = int256(ownerToPostCount[_owner]) -
+            1 -
+            (_page - 1) *
+            _limit;
+        int256 _endIndex = _startIndex - _limit; // no incluye el ultimo
+
+        require(_startIndex >= 0, "Out of range. Pagina no encontrada");
+        if (_endIndex < 0) {
+            _endIndex = -1;
+        }
+        uint256 _quantity = uint256(_startIndex - _endIndex);
+
+        Post[] memory _paginatedPosts = new Post[](_quantity);
+
+        for (uint256 i = 0; i < _quantity; i++) {
+            _paginatedPosts[i] = _filteredPosts[uint256(_startIndex) - i];
+        }
+
+        return _paginatedPosts;
+    }
+
     function getPostsFromOwner(address _owner)
         public
         view

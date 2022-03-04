@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { utils, BigNumber } from 'ethers'
+import { utils } from 'ethers'
 import { create } from 'ipfs-http-client'
 
 import Navbar from '../components/Navbar'
@@ -10,12 +10,13 @@ import { useModalContext } from '../context/modalContext'
 import { Input, Label } from '../components/Modal/ModalElements'
 import Modal from '../components/Modal'
 import { Buffer } from 'buffer'
+import { ModalImage } from '../components/Modal/ModalElements'
 
 const ipfs = create(process.env.REACT_APP_IPFS_CREATE)
 
 const App = () => {
     const { account, setLoading, provider, contract } = useAppContext()
-    const { tipModalOpen, setTipModalOpen, post, setSelectedFile, setNewPostModalOpen, newPostModalOpen, selectedFile } = useModalContext()
+    const { imageModalOpen, setImageModalOpen, tipModalOpen, setTipModalOpen, post, setSelectedFile, setNewPostModalOpen, newPostModalOpen, selectedFile } = useModalContext()
     const tipRef = useRef()
     const navigate = useNavigate()
     const descriptionRef = useRef()
@@ -98,6 +99,15 @@ const App = () => {
                 <Label htmlFor="description">Description</Label>
                 <Input type="text" name="description" id="description" ref={descriptionRef} required />
                 <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
+            </Modal>
+
+            <Modal
+                header={""}
+                showModal={imageModalOpen}
+                setModal={setImageModalOpen}
+                variant="image"
+            >
+                {post && <ModalImage src={process.env.REACT_APP_IPFS_BASE_URL + post.path} />}
             </Modal>
             <Navbar />
             {/**TODO Lo puse aca porque en el Modal no me abre el buscador de archivos.

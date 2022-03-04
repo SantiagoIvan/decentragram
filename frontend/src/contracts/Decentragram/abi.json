@@ -194,6 +194,123 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "int256",
+                "name": "_page",
+                "type": "int256"
+            },
+            {
+                "internalType": "int256",
+                "name": "_limit",
+                "type": "int256"
+            }
+        ],
+        "name": "getPostsFromTheLatest",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "tips",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTipsReceived",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "path",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address payable",
+                        "name": "owner",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct Decentragram.Post[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "internalType": "int256",
+                "name": "_page",
+                "type": "int256"
+            },
+            {
+                "internalType": "int256",
+                "name": "_limit",
+                "type": "int256"
+            }
+        ],
+        "name": "getPostsFromTheLatestFromOwner",
+        "outputs": [
+            {
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "id",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "tips",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "totalTipsReceived",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "path",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "string",
+                        "name": "description",
+                        "type": "string"
+                    },
+                    {
+                        "internalType": "address payable",
+                        "name": "owner",
+                        "type": "address"
+                    }
+                ],
+                "internalType": "struct Decentragram.Post[]",
+                "name": "",
+                "type": "tuple[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "owner",
         "outputs": [

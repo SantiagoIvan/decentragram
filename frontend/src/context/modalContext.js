@@ -8,6 +8,7 @@ const ModalContextProvider = ({ children }) => {
     const [tipModalOpen, setTipModalOpen] = useState(false)
     const [post, setPost] = useState(null)
     const [selectedFile, setSelectedFile] = useState(null);
+    const [imageModalOpen, setImageModalOpen] = useState(false)
 
     return (
         <ModalContext.Provider
@@ -19,7 +20,9 @@ const ModalContextProvider = ({ children }) => {
                 post,
                 setPost,
                 selectedFile,
-                setSelectedFile
+                setSelectedFile,
+                imageModalOpen,
+                setImageModalOpen
             }}
         >
             {children}
