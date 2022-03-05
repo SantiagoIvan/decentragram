@@ -11,11 +11,12 @@ import { Input, Label } from '../components/Modal/ModalElements'
 import Modal from '../components/Modal'
 import { Buffer } from 'buffer'
 import { ModalImage } from '../components/Modal/ModalElements'
+import { Title } from '../components/Text'
 
 const ipfs = create(process.env.REACT_APP_IPFS_CREATE)
 
 const App = () => {
-    const { account, setLoading, provider, contract } = useAppContext()
+    const { account, setLoading, provider, contract, appDisabled } = useAppContext()
     const { imageModalOpen, setImageModalOpen, tipModalOpen, setTipModalOpen, post, setSelectedFile, setNewPostModalOpen, newPostModalOpen, selectedFile } = useModalContext()
     const tipRef = useRef()
     const navigate = useNavigate()
@@ -77,6 +78,11 @@ const App = () => {
         }
     }
 
+    if (appDisabled) return (
+        <>
+            <Title>App disabled</Title>
+        </>
+    )
     return (
         <>
             <Modal header="Send some tips!" showModal={tipModalOpen} variant="tip" setModal={setTipModalOpen} >

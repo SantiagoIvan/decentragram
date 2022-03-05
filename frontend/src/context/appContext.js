@@ -11,18 +11,40 @@ const AppContextProvider = ({ children }) => {
     const [contract, setContract] = useState(null)
     const [loading, setLoading] = useState(true)
     const [account, setAccount] = useState(null)
+    const [chainId, setChainId] = useState(null)
+    const [appDisabled, setAppDisabled] = useState(false)
 
     useEffect(() => {
+        window.ethereum.on("chainChanged", () => window.location.reload())
+        const getChainId = async () => {
+            const _id = await window.ethereum.request({ method: 'eth_chainId' });
+            setChainId(_id)
+        }
+
         if (window.ethereum) {
             const _provider = new providers.Web3Provider(window.ethereum, 'any')
-            const _contract = Decentragram({
-                provider: _provider,
-                address: process.env.REACT_APP_RINKEBY_CONTRACT_ADDRESS
-            })
             setProvider(_provider)
-            setContract(_contract)
+
+            getChainId()
+            if (!chainId) return
+            if (["0x4", "0x2a"].includes(chainId)) {
+                let _addr
+                if (chainId === "0x4") { _addr = process.env.REACT_APP_RINKEBY_CONTRACT_ADDRESS }
+                else { _addr = process.env.REACT_APP_KOVAN_CONTRACT_ADDRESS }
+                const _contract = Decentragram({
+                    provider: _provider,
+                    address: _addr,
+                })
+                setContract(_contract)
+            } else {
+                alert("Select Kovan or Rinkeby network")
+                setAppDisabled(true)
+            }
         }
-    }, [])
+        return () => {
+            document.removeEventListener("chainChanged", () => window.location.reload())
+        }
+    }, [chainId])
 
     return (
         <AppContext.Provider
@@ -34,7 +56,9 @@ const AppContextProvider = ({ children }) => {
                 provider,
                 setProvider,
                 contract,
-                setContract
+                setContract,
+                appDisabled,
+                setAppDisabled
             }}
         >
             {children}
