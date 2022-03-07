@@ -18,7 +18,7 @@ const Home = () => {
     const [posts, setPosts] = useState()
     const [pageCount, setPageCount] = useState(null)
     const [currentPage, setCurrentPage] = useState(1)
-    const limit = 3;
+    const limit = 5;
 
     const handlePageClick = ({ selected }) => {
         setCurrentPage(selected + 1)
@@ -52,7 +52,7 @@ const Home = () => {
     if (loading) {
         return <Main><Loading /></Main>
     }
-    if (!loading && !posts) {
+    if (!posts) {
         return <Main><Title>We have no posts yet :(</Title></Main>
     }
     return (

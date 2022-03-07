@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import Blockies from 'react-blockies'
 
 export const PostContainer = styled.div`
-    border: 2px solid black;
     margin: 2rem 0rem;
+    min-height: 200px;
+    border-bottom: 2px solid black;
 `
 
 export const AvatarContainer = styled.div`
