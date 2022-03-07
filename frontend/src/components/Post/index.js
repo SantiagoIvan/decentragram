@@ -7,8 +7,6 @@ import { CustomLink, TipButtonContainer, PostContainer, AvatarContainer, Avatar,
 import { PrimaryButton } from '../Button'
 import { Text } from '../Text'
 
-// [TODO] cambiar el Custom Link para que vaya al perfil del usuario
-
 const Post = ({ post }) => {
     const { setTipModalOpen, setPost, setImageModalOpen } = useModalContext()
     const { account, setLoading, contract, provider } = useAppContext()
@@ -18,7 +16,6 @@ const Post = ({ post }) => {
     useEffect(() => {
         const observer = new window.IntersectionObserver((entries) => {
             const { isIntersecting } = entries[0]
-            console.log(isIntersecting)
             if (isIntersecting) {
                 setShow(true)
                 observer.disconnect()

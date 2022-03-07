@@ -1,6 +1,18 @@
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import Blockies from 'react-blockies'
+
+const fadeIn = keyframes`
+  from {
+    transform: scale(.25);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+`
 
 export const PostContainer = styled.div`
     margin: 2rem 0rem;
@@ -38,8 +50,7 @@ export const ImageContainer = styled.div`
     flex-direction: column;
     align-items: center;
     overflow-wrap: break-word;
-}
-
+    animation: ${fadeIn} 1s linear;
 `
 
 export const PostImage = styled.img`
