@@ -13,17 +13,31 @@ export const Overlay = styled.div`
     z-index:2;
     background: rgb(0,0,0,.5);
     
+    display: ${({ showModal }) => showModal ? "block" : "none"};
+`
+export const Container = styled.div`
     display: ${({ showModal }) => showModal ? "flex" : "none"};
     align-items: center;
     justify-content: center;
+    border: 10px solid black;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    max-width:500px;
+    z-index: 3;
 `
 
 export const ModalContainer = styled.div`
-    position: relative;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: ${({ showModal }) => showModal ? "block" : "none"};
     width: 80%;
-    max-width:600px;
+    max-width:500px;
     height: auto;
-    max-height: 600px;
+    max-height: 500px;
     border-radius: 5px;
     z-index:3;
     background: whitesmoke;
@@ -62,6 +76,10 @@ export const Label = styled.label`
 
 export const Input = styled.input`
     margin: .5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 `
 
 export const ModalImage = styled.img`

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import ReactDOM from 'react-dom'
 
 import { SecondaryTitle } from '../Text'
-import { ModalContainer, Overlay, ModalHeader, CloseButton, ModalContent } from './ModalElements'
+import { Container, ModalContainer, Overlay, ModalHeader, CloseButton, ModalContent } from './ModalElements'
 import { IconContext } from 'react-icons'
 
 const Modal = ({
@@ -37,8 +37,8 @@ const Modal = ({
     }, [closeModalOnEscapeKeyPress])
 
     return ReactDOM.createPortal(
-        <Overlay showModal={showModal} ref={modalRef} onClick={e => closeModalOnOutsideClick(e)}>
-            <ModalContainer>
+        <>
+            <ModalContainer showModal={showModal}>
                 <ModalHeader>
                     <SecondaryTitle>{header}</SecondaryTitle>
                     <IconContext.Provider value={{ style: { height: "32px", width: "32px" } }}>
@@ -49,9 +49,11 @@ const Modal = ({
                     {children}
                 </ModalContent>
             </ModalContainer>
-        </Overlay>,
+            <Overlay showModal={showModal} ref={modalRef} onClick={e => closeModalOnOutsideClick(e)} />
+        </>
+        ,
         document.getElementById("portal")
     )
 }
-
+// ref={modalRef} onClick={e => closeModalOnOutsideClick(e)}
 export default Modal

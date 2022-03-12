@@ -101,7 +101,7 @@ const App = () => {
                 variant="newPost"
             >
                 <Label htmlFor='myFile'>Select a file</Label>
-                <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
+                <Input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
                 <Label htmlFor="description">Description</Label>
                 <Input type="text" name="description" id="description" ref={descriptionRef} required />
                 <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
@@ -116,15 +116,6 @@ const App = () => {
                 {post && <ModalImage src={process.env.REACT_APP_IPFS_BASE_URL + post.path} />}
             </Modal>
             <Navbar />
-            {/**TODO Lo puse aca porque en el Modal no me abre el buscador de archivos.
-             * Intente creando un input type="button" que trigeree un click en un input file escondido 
-             * para ver si asi me saltaba la ventaninta y tampoco
-            */}
-            <Label htmlFor='myFile'>Select a file</Label>
-            <input type="file" id='myFile' name='myFile' required onChange={e => captureFile(e)} />
-            <Label htmlFor="description">Description</Label>
-            <Input type="text" name="description" id="description" ref={descriptionRef} required />
-            <PrimaryButton onClick={handleNewPostSubmit}>Submit</PrimaryButton>
 
             <Outlet />
         </>
