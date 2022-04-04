@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { utils } from 'ethers'
 import { create } from 'ipfs-http-client'
@@ -13,9 +13,9 @@ import { Buffer } from 'buffer'
 import { ModalImage } from '../components/Modal/ModalElements'
 import { Title } from '../components/Text'
 
-const ipfs = create(process.env.REACT_APP_IPFS_CREATE)
 
 const App = () => {
+    const [ipfs, setIpfs] = useState(null)
     const { account, setLoading, provider, contract, appDisabled } = useAppContext()
     const { imageModalOpen, setImageModalOpen, tipModalOpen, setTipModalOpen, post, setSelectedFile, setNewPostModalOpen, newPostModalOpen, selectedFile } = useModalContext()
     const tipRef = useRef()
@@ -24,8 +24,8 @@ const App = () => {
 
     useEffect(() => {
         if (!account) navigate("/login")
-
-    }, [account, navigate])
+        if (!ipfs) setIpfs(create(process.env.REACT_APP_IPFS_CREATE))
+    }, [account, navigate, ipfs])
 
     const handleTipSubmit = async () => {
         try {
