@@ -24,7 +24,7 @@ const App = () => {
 
     useEffect(() => {
         if (!account) navigate("/login")
-        if (!ipfs) setIpfs(create(process.env.REACT_APP_IPFS_CREATE))
+        if (!ipfs) setIpfs(create({ host: 'ipfs.infura.io', apiPath: '/api/v0', port: 5001, protocol: 'https' }))
     }, [account, navigate, ipfs])
 
     const handleTipSubmit = async () => {
